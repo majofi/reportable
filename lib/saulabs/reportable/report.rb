@@ -92,6 +92,8 @@ module Saulabs
       #   specifies whether data for the current reporting period is to be read; <b>if +:live_data+ is +true+, you will experience a performance hit since the request cannot be satisfied from the cache alone</b>
       # @option options [DateTime, Boolean] :end_date (false)
       #   when specified, the report will only include data for the +:limit+ reporting periods until this date.
+      # @option options [Symbol] :include (nil)
+      #   when specified the  +ActiveRecord::Base#find+ call will include associated objects, usefull for additional conditions in :conditions
       #
       # @return [Array<Array<DateTime, Float>>]
       #   the result of the report as pairs of {DateTime}s and {Float}s
@@ -120,7 +122,8 @@ module Saulabs
             :conditions => conditions,
             :group      => options[:grouping].to_sql(@date_column),
             :order      => "#{options[:grouping].to_sql(@date_column)} ASC",
-            :limit      => options[:limit]
+            :limit      => options[:limit],
+            :incude     => option[:include]
           )
         end
 
@@ -145,7 +148,7 @@ module Saulabs
           case context
             when :initialize
               options.each_key do |k|
-                raise ArgumentError.new("Invalid option #{k}!") unless [:limit, :aggregation, :grouping, :date_column, :value_column, :conditions, :live_data, :end_date].include?(k)
+                raise ArgumentError.new("Invalid option #{k}!") unless [:limit, :aggregation, :grouping, :date_column, :value_column, :conditions, :live_data, :end_date, :columns].include?(k)
               end
               raise ArgumentError.new("Invalid aggregation #{options[:aggregation]}!") if options[:aggregation] && ![:count, :sum, :maximum, :minimum, :average].include?(options[:aggregation])
               raise ArgumentError.new('The name of the column holding the value to sum has to be specified for aggregation :sum!') if [:sum, :maximum, :minimum, :average].include?(options[:aggregation]) && !options.key?(:value_column)
