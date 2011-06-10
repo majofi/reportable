@@ -123,7 +123,7 @@ module Saulabs
             :group      => options[:grouping].to_sql(@date_column),
             :order      => "#{options[:grouping].to_sql(@date_column)} ASC",
             :limit      => options[:limit],
-            :incude     => option[:include]
+            :incude     => options[:include]
           )
         end
 
@@ -154,7 +154,7 @@ module Saulabs
               raise ArgumentError.new('The name of the column holding the value to sum has to be specified for aggregation :sum!') if [:sum, :maximum, :minimum, :average].include?(options[:aggregation]) && !options.key?(:value_column)
             when :run
               options.each_key do |k|
-                raise ArgumentError.new("Invalid option #{k}!") unless [:limit, :conditions, :grouping, :live_data, :end_date].include?(k)
+                raise ArgumentError.new("Invalid option #{k}!") unless [:limit, :conditions, :grouping, :live_data, :end_date, :include].include?(k)
               end
           end
           raise ArgumentError.new('Options :live_data and :end_date may not both be specified!') if options[:live_data] && options[:end_date]
