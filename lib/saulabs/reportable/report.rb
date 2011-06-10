@@ -123,7 +123,7 @@ module Saulabs
             :group      => options[:grouping].to_sql(@date_column),
             :order      => "#{options[:grouping].to_sql(@date_column)} ASC",
             :limit      => options[:limit],
-            :incude     => options[:include]
+            :include     => options[:include]
           )
         end
 
