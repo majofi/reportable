@@ -121,7 +121,7 @@ module Saulabs
             @value_column,
             :conditions => conditions,
             :group      => options[:grouping].to_sql(@date_column),
-            :order      => "#{options[:grouping].to_sql(@date_column)} ASC",
+            :order      => "#{options[:grouping].to_sql("#{ActiveRecord::Base.connection.quote_table_name(@klass.table_name)}.#{ActiveRecord::Base.connection.quote_column_name(@date_column.to_s)}")} ASC",
             :limit      => options[:limit],
             :include     => options[:include]
           )
